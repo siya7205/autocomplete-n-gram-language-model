@@ -131,7 +131,42 @@ The use of Twitter data introduces unique challenges, such as handling informal 
 6. Explore applications of the model in tasks such as text completion or content moderation
 
 ## Installation and Usage
-```pip install nltk numpy pandas```
+
+### Install dependencies
+```bash
+pip install nltk numpy pandas matplotlib
+```
+
+### Interactive autocomplete (single dataset)
+```bash
+python main.py           # Twitter dataset
+python main_gram.py      # Disney dataset
+python main_per.py       # Disney dataset with per-model perplexity
+python main_multi_dataset.py  # all four datasets, interactive
+```
+
+### Multi-dataset analysis report
+Run the full analysis on the four built-in datasets and generate a Markdown
+report plus CSV/JSON metrics:
+
+```bash
+python -m analysis.run
+```
+
+Specify custom datasets using `NAME:PATH` pairs (one sentence per line):
+
+```bash
+python -m analysis.run \
+    --dataset Twitter:data/en_US.twitter.txt \
+    --dataset Disney:data/disney.txt
+```
+
+Outputs are written to:
+- `reports/REPORT.md` — human-readable comparison report
+- `reports/artifacts/metrics.csv` — per-dataset metrics table
+- `reports/artifacts/metrics.json` — same metrics in JSON format
+
+See [reports/REPORT.md](reports/REPORT.md) for the pre-generated report.
 
 ## Contributing
 
