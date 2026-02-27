@@ -1,0 +1,5 @@
+dataset,path,n_docs_train,n_docs_valid,n_docs_test,n_tokens_train,n_tokens_valid,n_tokens_test,vocab_size,oov_rate_test,ngram_types_Unigram,ngram_types_Bigram,ngram_types_Trigram,ngram_types_4-gram,ngram_types_5-gram,perplexity_Unigram,perplexity_Bigram,perplexity_Trigram,perplexity_4-gram,top1_accuracy,top5_accuracy,mean_log_prob,n_instances
+Twitter,data/en_US.twitter.txt,33572,7194,7195,522560,112993,111437,13651,0.0548,13654,189191,384641,469059,491051,784.3,2108.46,2131.67,1706.02,0.032,0.0413,-9.4971,7334
+Shakespeare,data/merchant.txt,2169,464,466,19271,4929,4261,1097,0.1148,1100,8599,14867,16994,17500,119.68,178.23,185.74,138.34,0.0206,0.0999,-6.9815,3795
+Disney,data/disney.txt,347,74,76,8628,2097,2596,656,0.1445,659,4359,7306,8257,8464,113.97,180.11,166.71,133.91,0.0675,0.0806,-6.465,2520
+OnCampus,data/oncampus_no_numbers.txt,65683,14074,14076,1001733,216122,214492,11997,0.0187,12000,148325,316003,409583,453989,196.96,308.04,341.86,314.1,0.2857,0.4552,-7.3599,7138
