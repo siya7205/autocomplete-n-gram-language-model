@@ -679,13 +679,118 @@ _COMPARISON_SECTION = """\
 """
 
 
-def generate_report(dataset_results: list) -> str:
+def generate_figures(dataset_results: list) -> dict:
+    """Generate PNG plots and save them to FIGURES_DIR.
+
+    Produces three plots:
+    - perplexity_by_order.png  — grouped bar chart of mean perplexity for each
+      n-gram order across datasets.
+    - autocomplete_accuracy.png — grouped bar chart of Top-1 and Top-5
+      autocomplete accuracy per dataset.
+    - dataset_sizes.png        — horizontal bar chart of training token counts.
+
+    Parameters
+    ----------
+    dataset_results:
+        List of per-dataset result dicts produced by ``analyse_dataset``.
+
+    Returns
+    -------
+    dict mapping figure name (str) to saved file path (str).
+    """
+    import matplotlib
+    matplotlib.use("Agg")  # non-interactive backend, safe for servers
+    import matplotlib.pyplot as plt
+
+    os.makedirs(FIGURES_DIR, exist_ok=True)
+    saved = {}
+
+    names = [r["name"] for r in dataset_results]
+    colors = ["#4C72B0", "#DD8452", "#55A868", "#C44E52"]
+    orders = list(range(1, MAX_N + 1))
+    order_labels = [_ngram_label(n) for n in orders]
+
+    # ── 1. Perplexity by n-gram order ─────────────────────────────────────────
+    fig, ax = plt.subplots(figsize=(9, 5))
+    x = np.arange(len(orders))
+    bar_width = 0.8 / len(names)
+    for i, (res, color) in enumerate(zip(dataset_results, colors)):
+        vals = [res["perplexity_by_order"].get(n, float("nan")) for n in orders]
+        offset = (i - len(names) / 2 + 0.5) * bar_width
+        bars = ax.bar(x + offset, vals, bar_width, label=res["name"], color=color, alpha=0.85)
+    ax.set_xticks(x)
+    ax.set_xticklabels(order_labels)
+    ax.set_ylabel("Mean Perplexity (lower is better)")
+    ax.set_title("Mean Perplexity on Test Split by N-gram Order")
+    ax.legend(title="Dataset")
+    ax.set_yscale("log")
+    ax.yaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
+    fig.tight_layout()
+    path_perp = os.path.join(FIGURES_DIR, "perplexity_by_order.png")
+    fig.savefig(path_perp, dpi=120)
+    plt.close(fig)
+    saved["perplexity_by_order"] = path_perp
+    print(f"  Saved {path_perp}")
+
+    # ── 2. Autocomplete accuracy ───────────────────────────────────────────────
+    fig, ax = plt.subplots(figsize=(8, 4))
+    x = np.arange(len(names))
+    bar_width = 0.35
+    top1 = [r["autocomplete"]["top1_accuracy"] * 100 for r in dataset_results]
+    top5 = [r["autocomplete"]["top5_accuracy"] * 100 for r in dataset_results]
+    ax.bar(x - bar_width / 2, top1, bar_width, label="Top-1 Accuracy", color="#4C72B0", alpha=0.85)
+    ax.bar(x + bar_width / 2, top5, bar_width, label="Top-5 Accuracy", color="#DD8452", alpha=0.85)
+    ax.set_xticks(x)
+    ax.set_xticklabels(names)
+    ax.set_ylabel("Accuracy (%)")
+    ax.set_title(f"Autocomplete Accuracy (using {MAX_N}-gram model)")
+    ax.legend()
+    for xi, (v1, v5) in enumerate(zip(top1, top5)):
+        ax.text(xi - bar_width / 2, v1 + 0.3, f"{v1:.1f}%", ha="center", va="bottom", fontsize=8)
+        ax.text(xi + bar_width / 2, v5 + 0.3, f"{v5:.1f}%", ha="center", va="bottom", fontsize=8)
+    fig.tight_layout()
+    path_acc = os.path.join(FIGURES_DIR, "autocomplete_accuracy.png")
+    fig.savefig(path_acc, dpi=120)
+    plt.close(fig)
+    saved["autocomplete_accuracy"] = path_acc
+    print(f"  Saved {path_acc}")
+
+    # ── 3. Dataset sizes ───────────────────────────────────────────────────────
+    fig, ax = plt.subplots(figsize=(8, 4))
+    tokens = [r["dataset_stats"]["n_tokens_train"] for r in dataset_results]
+    bar_colors = colors[: len(names)]
+    bars = ax.barh(names, tokens, color=bar_colors, alpha=0.85)
+    ax.set_xlabel("Training Tokens")
+    ax.set_title("Training Set Size by Dataset")
+    for bar, val in zip(bars, tokens):
+        ax.text(
+            bar.get_width() + max(tokens) * 0.01,
+            bar.get_y() + bar.get_height() / 2,
+            f"{val:,}",
+            va="center",
+            fontsize=9,
+        )
+    ax.set_xlim(0, max(tokens) * 1.18)
+    fig.tight_layout()
+    path_size = os.path.join(FIGURES_DIR, "dataset_sizes.png")
+    fig.savefig(path_size, dpi=120)
+    plt.close(fig)
+    saved["dataset_sizes"] = path_size
+    print(f"  Saved {path_size}")
+
+    return saved
+
+
+def generate_report(dataset_results: list, figures: dict = None) -> str:
     """Build the full Markdown report string.
 
     Parameters
     ----------
     dataset_results:
         List of per-dataset result dicts produced by ``analyse_dataset``.
+    figures:
+        Optional dict mapping figure key to file path (from ``generate_figures``).
+        When provided, figure images are embedded in the report.
 
     Returns
     -------
@@ -764,6 +869,20 @@ def generate_report(dataset_results: list) -> str:
         comparison_rows="\n".join(comparison_rows),
     )
     sections.append(comparison)
+
+    # Embed figures if available
+    if figures:
+        fig_lines = ["\n## Figures\n"]
+        if "dataset_sizes" in figures:
+            rel = os.path.relpath(figures["dataset_sizes"], REPORT_DIR)
+            fig_lines.append(f"### Training Set Sizes\n\n![Dataset Sizes]({rel})\n")
+        if "perplexity_by_order" in figures:
+            rel = os.path.relpath(figures["perplexity_by_order"], REPORT_DIR)
+            fig_lines.append(f"### Perplexity by N-gram Order\n\n![Perplexity by Order]({rel})\n")
+        if "autocomplete_accuracy" in figures:
+            rel = os.path.relpath(figures["autocomplete_accuracy"], REPORT_DIR)
+            fig_lines.append(f"### Autocomplete Accuracy\n\n![Autocomplete Accuracy]({rel})\n")
+        sections.append("\n".join(fig_lines))
 
     return "\n".join(sections)
 
@@ -938,8 +1057,11 @@ def main():
 
     save_artifacts(flat_metrics)
 
+    print("Generating figures …")
+    figures = generate_figures(all_results)
+
     print("Generating report …")
-    report_md = generate_report(all_results)
+    report_md = generate_report(all_results, figures=figures)
     report_path = os.path.join(REPORT_DIR, "REPORT.md")
     with open(report_path, "w", encoding="utf-8") as fh:
         fh.write(report_md)
@@ -949,6 +1071,7 @@ def main():
     print(f"  Report : {report_path}")
     print(f"  Metrics: {ARTIFACTS_DIR}/metrics.csv")
     print(f"           {ARTIFACTS_DIR}/metrics.json")
+    print(f"  Figures: {FIGURES_DIR}/")
 
 
 if __name__ == "__main__":

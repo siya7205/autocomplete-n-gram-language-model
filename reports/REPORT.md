@@ -1,6 +1,6 @@
 # N-gram Autocomplete Language Model — Multi-Dataset Analysis Report
 
-**Generated:** 2026-02-27 11:23 UTC
+**Generated:** 2026-02-27 13:52 UTC
 
 ---
 
@@ -593,3 +593,18 @@ Artefacts are written to:
 3. Evaluate on held-out splits from the *same* domain used for training.
 4. Explore neural language models (LSTM, Transformer) as baselines.
 5. Add a web-based demo interface.
+
+
+## Figures
+
+### Training Set Sizes
+
+![Dataset Sizes](figures/dataset_sizes.png)
+
+### Perplexity by N-gram Order
+
+![Perplexity by Order](figures/perplexity_by_order.png)
+
+### Autocomplete Accuracy
+
+![Autocomplete Accuracy](figures/autocomplete_accuracy.png)
