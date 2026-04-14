@@ -9,6 +9,7 @@ from language_model import count_n_grams, get_suggestions
 
 
 DEFAULT_DATA_PATH = Path(__file__).resolve().parents[1] / "data" / "en_US.twitter.txt"
+RANDOM_SEED = 87
 
 
 def _ensure_nltk_tokenizer() -> None:
@@ -28,7 +29,7 @@ def train_model(data_path: Path, train_split: float = 0.8, minimum_freq: int = 2
         data = dataset_file.read()
 
     tokenized_data = get_tokenized_data(data)
-    random.seed(87)
+    random.seed(RANDOM_SEED)
     random.shuffle(tokenized_data)
 
     train_size = int(len(tokenized_data) * train_split)
