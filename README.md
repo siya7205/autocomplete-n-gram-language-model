@@ -214,6 +214,39 @@ python -m autocomplete.generate_labeling_csv \
   --min-tokens 3
 ```
 
+### Train sentiment classifier (Phase 2)
+
+1. Generate worksheet CSV:
+
+```bash
+python -m autocomplete.generate_labeling_csv --sample-size 300
+```
+
+2. Manually label `sentiment_label` in the CSV with values such as `positive` / `negative` (optionally `neutral`).
+3. Train and save model artifact:
+
+```bash
+python -m autocomplete.train_sentiment \
+  --csv data/sentiment_labeled.csv \
+  --out models/sentiment.pkl \
+  --seed 42
+```
+
+Expected training output shape includes:
+- accuracy
+- weighted precision / recall / F1
+- confusion matrix
+
+4. Predict sentiment from CLI:
+
+```bash
+python -m autocomplete.sentiment_predict \
+  --text "I love this" \
+  --model models/sentiment.pkl
+```
+
+The sentiment dataset can be small (for example 200–500 labeled rows), but model quality generally improves with more labeled examples.
+
 ## Contributing
 
 We welcome contributions to this research project. Please see our [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines on how to submit issues, feature requests, and pull requests.
