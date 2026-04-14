@@ -25,6 +25,16 @@ def _ensure_nltk_tokenizer() -> None:
 
 
 def train_model(data_path: Path, train_split: float = 0.8, minimum_freq: int = 2):
+    """Train N-gram count tables from a text dataset.
+
+    Args:
+        data_path: Path to newline-delimited text data.
+        train_split: Fraction of tokenized sentences used for training.
+        minimum_freq: Minimum token count kept in closed vocabulary.
+
+    Returns:
+        A tuple of (vocabulary, n_gram_counts_list).
+    """
     with open(data_path, "r", encoding="utf-8") as dataset_file:
         data = dataset_file.read()
 
@@ -46,6 +56,21 @@ def train_model(data_path: Path, train_split: float = 0.8, minimum_freq: int = 2
 
 
 def predict_next_words(text: str, top_k: int, data_path: Path, k_smoothing: float = 1.0):
+    """Predict next-word suggestions for input text.
+
+    Note:
+        This Phase 0 baseline retrains in-memory from `data_path` on each call
+        to keep usage simple and behavior aligned with existing scripts.
+
+    Args:
+        text: Input prefix text.
+        top_k: Number of suggestions to return.
+        data_path: Dataset path used to train before prediction.
+        k_smoothing: Add-k smoothing value.
+
+    Returns:
+        List of (word, probability) tuples sorted by descending probability.
+    """
     _ensure_nltk_tokenizer()
     vocabulary, n_gram_counts_list = train_model(data_path=data_path)
 
