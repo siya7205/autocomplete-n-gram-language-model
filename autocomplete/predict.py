@@ -44,20 +44,27 @@ def train_model(data_path: Path, train_split: float = 0.8, minimum_freq: int = 2
     return vocabulary, n_gram_counts_list
 
 
-def predict_next_words(text: str, topk: int, data_path: Path, k_smoothing: float = 1.0):
+def predict_next_words(text: str, top_k: int, data_path: Path, k_smoothing: float = 1.0):
     _ensure_nltk_tokenizer()
     vocabulary, n_gram_counts_list = train_model(data_path=data_path)
 
     tokens = nltk.word_tokenize(text.lower().strip())
     suggestions = get_suggestions(tokens, n_gram_counts_list, vocabulary, k_smoothing)
     sorted_suggestions = sorted(suggestions, key=lambda x: x[1], reverse=True)
-    return sorted_suggestions[:topk]
+    return sorted_suggestions[:top_k]
 
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Predict top-k next-word suggestions using the N-gram model.")
     parser.add_argument("--text", required=True, help="Input text prefix to autocomplete.")
-    parser.add_argument("--topk", type=int, default=5, help="Number of suggestions to print.")
+    parser.add_argument(
+        "--top-k",
+        "--topk",
+        dest="top_k",
+        type=int,
+        default=5,
+        help="Number of suggestions to print.",
+    )
     parser.add_argument(
         "--data",
         default=str(DEFAULT_DATA_PATH),
@@ -70,21 +77,20 @@ def main() -> None:
     parser = _build_parser()
     args = parser.parse_args()
 
-    if args.topk < 1:
-        raise ValueError("--topk must be at least 1.")
+    if args.top_k < 1:
+        raise ValueError("--top-k must be at least 1.")
 
     suggestions = predict_next_words(
         text=args.text,
-        topk=args.topk,
+        top_k=args.top_k,
         data_path=Path(args.data),
     )
 
     print(f'Input: "{args.text}"')
-    print(f"Top {args.topk} suggestions:")
+    print(f"Top {args.top_k} suggestions:")
     for rank, (word, probability) in enumerate(suggestions, start=1):
         print(f"{rank}. {word}\t{probability:.6f}")
 
 
 if __name__ == "__main__":
     main()
-

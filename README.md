@@ -161,13 +161,13 @@ python main.py
 ### Predict top-k next words (single command)
 
 ```bash
-python -m autocomplete.predict --text "I want to" --topk 5
+python -m autocomplete.predict --text "I want to" --top-k 5
 ```
 
 Optional dataset override:
 
 ```bash
-python -m autocomplete.predict --text "I want to" --topk 5 --data ./data/disney.txt
+python -m autocomplete.predict --text "I want to" --top-k 5 --data ./data/disney.txt
 ```
 
 ### Example input/output format
@@ -175,7 +175,7 @@ python -m autocomplete.predict --text "I want to" --topk 5 --data ./data/disney.
 Input:
 
 ```bash
-python -m autocomplete.predict --text "I want to" --topk 3
+python -m autocomplete.predict --text "I want to" --top-k 3
 ```
 
 Output format:
