@@ -197,6 +197,23 @@ python main_multi_dataset.py
 python -m analysis.run
 ```
 
+### Generate sentiment labeling worksheet CSV (Phase 1)
+
+```bash
+python -m autocomplete.generate_labeling_csv --sample-size 300
+```
+
+Optional overrides:
+
+```bash
+python -m autocomplete.generate_labeling_csv \
+  --data ./data/en_US.twitter.txt \
+  --output ./data/sentiment_labeling_worksheet.csv \
+  --sample-size 300 \
+  --seed 87 \
+  --min-tokens 3
+```
+
 ## Contributing
 
 We welcome contributions to this research project. Please see our [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines on how to submit issues, feature requests, and pull requests.
