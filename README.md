@@ -247,6 +247,50 @@ python -m autocomplete.sentiment_predict \
 
 The sentiment dataset can be small (for example 200–500 labeled rows), but model quality generally improves with more labeled examples.
 
+### No-time option: weakly supervised sentiment labels
+
+If you do not have time to manually label sentiment, generate heuristic labels automatically using a keyword lexicon:
+
+```bash
+python scripts/weak_label_sentiment.py \
+  --corpus data/Shakespeare.txt \
+  --out data/sentiment_labeled_weak.csv \
+  --max-rows 1000 \
+  --seed 42
+```
+
+Or use an existing worksheet CSV:
+
+```bash
+python scripts/weak_label_sentiment.py \
+  --worksheet data/sentiment_to_label.csv \
+  --out data/sentiment_labeled_weak.csv \
+  --seed 42
+```
+
+Train a sentiment model from weak labels:
+
+```bash
+python -m autocomplete.train_sentiment \
+  --csv data/sentiment_labeled_weak.csv \
+  --out models/sentiment_weak.pkl \
+  --seed 42
+```
+
+Evaluate with weak labels/model:
+
+```bash
+python -m autocomplete.evaluate \
+  --corpus data/Shakespeare.txt \
+  --sentiment-csv data/sentiment_labeled_weak.csv \
+  --sentiment-model models/sentiment_weak.pkl \
+  --top-k 5 \
+  --seed 42 \
+  --out results/metrics_weak.json
+```
+
+Limitation: weak labels are heuristic (keyword-based), so metrics are indicative and should not be treated as ground-truth sentiment quality.
+
 ### Sentiment-aware autocomplete reranking (Phase 3)
 
 Use sentiment reranking to bias top-k next-word suggestions toward a target tone:
@@ -342,17 +386,20 @@ Expected behavior:
 
 ### Final report: generate results
 
-Run one command to produce sweep tables, plots, and a markdown snippet for your report:
+Run one command to produce weak labels, train the weak model, and generate sweep tables, plots, and a markdown snippet:
 
 ```bash
 python scripts/run_final_report_results.py \
-  --corpus data/en_US.twitter.txt \
-  --sentiment-csv data/sentiment_labeled.csv \
-  --model models/sentiment.pkl \
+  --corpus data/Shakespeare.txt \
+  --sentiment-csv data/sentiment_labeled_weak.csv \
+  --model models/sentiment_weak.pkl \
+  --run-weak-labeling \
   --outdir results/final \
   --seed 42 \
   --max-examples 500
 ```
+
+If you already have `data/sentiment_labeled_weak.csv`, omit `--run-weak-labeling`.
 
 Generated files in `results/final/`:
 - `summary.csv`: combined sweep table across `top_k in [1,3,5]` and `sentiment_weight in [0.0,0.5,1.0,2.0]`
