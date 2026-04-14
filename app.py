@@ -110,7 +110,7 @@ def main() -> None:
 
     if used_neutral_fallback:
         st.info(
-            f'Neutral is unavailable in this sentiment model (labels: {model_labels}); reranking is disabled '
+            f'neutral is unavailable in this sentiment model (labels: {model_labels}); reranking is disabled '
             "for this request."
         )
 
