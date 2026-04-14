@@ -132,17 +132,37 @@ The use of Twitter data introduces unique challenges, such as handling informal 
 
 ## Installation and Usage
 
-### Install dependencies
+### Phase 0 quickstart (baseline train + top-k prediction)
+
+#### 1) Setup (venv optional)
 ```bash
-pip install nltk numpy pandas matplotlib
+python -m venv .venv
+source .venv/bin/activate
 ```
 
-### Interactive autocomplete (single dataset)
+#### 2) Install dependencies
 ```bash
-python main.py           # Twitter dataset
-python main_gram.py      # Disney dataset
-python main_per.py       # Disney dataset with per-model perplexity
-python main_multi_dataset.py  # all four datasets, interactive
+pip install -r requirements.txt
+```
+
+#### 3) Train baseline model
+```bash
+python -m autocomplete.train --dataset data/disney.txt --model-path models/ngram_baseline.pkl
+```
+
+#### 4) Predict / autocomplete (top-k)
+```bash
+python -m autocomplete.predict --text "I want to" --topk 5 --model-path models/ngram_baseline.pkl
+```
+
+The CLI above keeps the existing N-gram behavior and uses the highest-order trained model to rank next-word suggestions.
+
+### Existing interactive scripts
+```bash
+python main.py                 # Twitter dataset
+python main_gram.py            # Disney dataset
+python main_per.py             # Disney dataset with per-model perplexity
+python main_multi_dataset.py   # all four datasets, interactive
 ```
 
 ### Multi-dataset analysis report
@@ -167,6 +187,15 @@ Outputs are written to:
 - `reports/artifacts/metrics.json` — same metrics in JSON format
 
 See [reports/REPORT.md](reports/REPORT.md) for the pre-generated report.
+
+### Sample sentiment data stub (for later phases)
+
+A tiny demo dataset is included at `data/sentiment_sample.csv` with columns:
+
+- `text`
+- `label`
+
+This file is only a placeholder for development/testing and can be replaced with a real sentiment dataset later.
 
 ## Contributing
 
