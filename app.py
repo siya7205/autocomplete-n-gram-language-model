@@ -47,10 +47,8 @@ def main() -> None:
         step=0.1,
         disabled=sentiment == "off",
     )
-
-    with st.expander("Model paths (optional)"):
-        data_path = st.text_input("Language model corpus path", value=str(DEFAULT_DATA_PATH))
-        sentiment_model_path = st.text_input("Sentiment model path", value="models/sentiment.pkl")
+    data_path = str(DEFAULT_DATA_PATH)
+    sentiment_model_path = "models/sentiment.pkl"
 
     if not prefix_text.strip():
         st.info("Type a prefix to view suggestions.")

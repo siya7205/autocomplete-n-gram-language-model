@@ -332,7 +332,6 @@ Controls:
 - **Top-k suggestions**: number of rows shown
 - **Target sentiment**: `off`, `positive`, `negative`, or `neutral`
 - **Sentiment weight**: reranking strength (used when sentiment is not `off`)
-- **Model paths (optional)**: corpus path for LM training and sentiment model artifact path
 
 Expected behavior:
 - Suggestions update as you change inputs.

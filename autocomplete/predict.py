@@ -91,6 +91,21 @@ def rerank_with_sentiment_model(
     model,
     sentiment_weight: float,
 ):
+    """Rerank LM suggestions using a preloaded sentiment model.
+
+    Args:
+        prefix_text: Input prefix text used to build candidate continuations.
+        suggestions: Iterable of (word, lm_score) suggestions from the LM.
+        target_sentiment: Target sentiment label to optimize for.
+        model: Loaded sklearn pipeline sentiment model.
+        sentiment_weight: Weight used in final score combination.
+
+    Returns:
+        Tuple of:
+            - ranked rows with keys word/lm_score/sentiment_score/final_score
+            - neutral fallback flag
+            - sorted model labels
+    """
     classifier = model.named_steps.get("classifier")
     if classifier is None:
         raise ValueError(
