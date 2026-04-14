@@ -24,12 +24,12 @@ def _ensure_nltk_tokenizer() -> None:
             nltk.download(resource_name, quiet=True)
 
 
-def train_model(data_path: Path, train_split: float = 0.8, minimum_freq: int = 2):
+def train_model(data_path: Path, train_fraction: float = 0.8, minimum_freq: int = 2):
     """Train N-gram count tables from a text dataset.
 
     Args:
         data_path: Path to newline-delimited text data.
-        train_split: Fraction of tokenized sentences used for training.
+        train_fraction: Fraction of tokenized sentences used for training.
         minimum_freq: Minimum token count kept in closed vocabulary.
 
     Returns:
@@ -42,11 +42,12 @@ def train_model(data_path: Path, train_split: float = 0.8, minimum_freq: int = 2
     random.seed(RANDOM_SEED)
     random.shuffle(tokenized_data)
 
-    train_size = int(len(tokenized_data) * train_split)
+    train_size = int(len(tokenized_data) * train_fraction)
     train_data = tokenized_data[:train_size]
-    test_data = tokenized_data[train_size:]
 
-    train_data_processed, _, vocabulary = preprocess_data(train_data, test_data, minimum_freq)
+    train_data_processed, _, vocabulary = preprocess_data(
+        train_data, tokenized_data[train_size:], minimum_freq
+    )
 
     n_gram_counts_list = []
     for n in range(1, 5):
