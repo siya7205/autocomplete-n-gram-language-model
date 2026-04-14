@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+from collections import Counter
 from pathlib import Path
 from typing import Any, Dict, Optional, Tuple
 
@@ -40,25 +42,25 @@ def _load_labeled_rows(csv_path: Path) -> Tuple[list[str], list[str]]:
 def train_sentiment_model(csv_path: str, model_out_path: str, seed: int = 42) -> Dict[str, Any]:
     texts, labels = _load_labeled_rows(Path(csv_path))
 
-    if len(set(labels)) < 2:
-        raise ValueError("Need at least 2 sentiment classes to train a classifier.")
+    distinct_labels = sorted(set(labels))
+    if len(distinct_labels) < 2:
+        raise ValueError(
+            f"Need at least 2 sentiment classes to train a classifier; found {len(distinct_labels)}: {distinct_labels}"
+        )
 
-    try:
-        X_train, X_test, y_train, y_test = train_test_split(
-            texts,
-            labels,
-            test_size=0.2,
-            random_state=seed,
-            stratify=labels,
-        )
-    except ValueError:
-        X_train, X_test, y_train, y_test = train_test_split(
-            texts,
-            labels,
-            test_size=0.2,
-            random_state=seed,
-            stratify=None,
-        )
+    label_counts = Counter(labels)
+    test_size = 0.2
+    n_test_samples = math.ceil(len(labels) * test_size)
+    can_stratify = all(count >= 2 for count in label_counts.values()) and n_test_samples >= len(label_counts)
+    stratify_labels = labels if can_stratify else None
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        texts,
+        labels,
+        test_size=test_size,
+        random_state=seed,
+        stratify=stratify_labels,
+    )
 
     model = Pipeline(
         steps=[
