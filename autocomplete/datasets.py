@@ -29,7 +29,7 @@ def split_train_test(
     seed: int = DEFAULT_RANDOM_SEED,
 ) -> Tuple[List[List[str]], List[List[str]]]:
     if not 0 < train_fraction <= 1:
-        raise ValueError("train_fraction must be between 0 and 1 (inclusive of 1).")
+        raise ValueError("train_fraction must be greater than 0 and at most 1.")
 
     tokenized = [list(sentence) for sentence in tokenized_sentences]
     if shuffle:
