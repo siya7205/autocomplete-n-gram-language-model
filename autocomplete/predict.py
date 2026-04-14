@@ -75,7 +75,12 @@ def rerank_with_sentiment(
     sentiment_weight: float,
 ):
     model = load_sentiment_model(sentiment_model_path)
-    classifier = model.named_steps["classifier"]
+    classifier = model.named_steps.get("classifier")
+    if classifier is None:
+        raise ValueError(
+            "Sentiment model is missing the expected 'classifier' pipeline step. "
+            "Re-train with: python -m autocomplete.train_sentiment --csv <labeled_csv> --out <model_path>."
+        )
     model_labels = {str(label).lower() for label in getattr(classifier, "classes_", [])}
 
     neutral_fallback = False
