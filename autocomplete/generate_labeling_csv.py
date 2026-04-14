@@ -46,7 +46,6 @@ def generate_labeling_worksheet(
     rng = random.Random(seed)
     selected_rows = rng.sample(candidates, k=count)
 
-    output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("w", encoding="utf-8", newline="") as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=["id", "text", "sentiment_label", "notes"])

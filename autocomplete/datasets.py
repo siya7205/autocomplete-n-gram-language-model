@@ -9,7 +9,7 @@ DEFAULT_RANDOM_SEED = 87
 
 
 def load_corpus_text(data_path: Path) -> str:
-    return Path(data_path).read_text(encoding="utf-8")
+    return data_path.read_text(encoding="utf-8")
 
 
 def load_corpus_rows(data_path: Path) -> List[str]:
