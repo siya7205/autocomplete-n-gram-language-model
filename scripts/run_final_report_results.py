@@ -3,7 +3,7 @@ import json
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional, Union
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -82,8 +82,8 @@ def _make_summary_rows(
     sentiment_weight_values: List[float],
     seed: int,
     max_examples: int,
-) -> List[Dict[str, float | int | None]]:
-    rows: List[Dict[str, float | int | None]] = []
+) -> List[Dict[str, Optional[Union[float, int]]]]:
+    rows: List[Dict[str, Optional[Union[float, int]]]] = []
 
     for top_k in top_k_values:
         for sentiment_weight in sentiment_weight_values:
@@ -104,7 +104,7 @@ def _make_summary_rows(
                 sentiment_weight=sentiment_weight,
             )
 
-            row: Dict[str, float | int | None] = {
+            row: Dict[str, Optional[Union[float, int]]] = {
                 "top_k": top_k,
                 "sentiment_weight": sentiment_weight,
                 "top_k_hit_rate": float(top_k_metrics["top_k_hit_rate"]),
