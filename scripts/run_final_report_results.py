@@ -220,6 +220,26 @@ def _best_row_by_metric(summary_df: pd.DataFrame, metric: str) -> pd.Series:
     return summary_df.loc[idx]
 
 
+def _dataframe_to_markdown_table(dataframe: pd.DataFrame) -> str:
+    headers = [str(column) for column in dataframe.columns]
+    separator = ["---" for _ in headers]
+    lines = [
+        f"| {' | '.join(headers)} |",
+        f"| {' | '.join(separator)} |",
+    ]
+
+    for _, row in dataframe.iterrows():
+        values: List[str] = []
+        for column in dataframe.columns:
+            value = row[column]
+            if pd.isna(value):
+                values.append("")
+            else:
+                values.append(str(value).replace("|", "\\|"))
+        lines.append(f"| {' | '.join(values)} |")
+    return "\n".join(lines)
+
+
 def _build_report_snippet(
     summary_df: pd.DataFrame,
     corpus_path: Path,
@@ -241,7 +261,7 @@ def _build_report_snippet(
     float_cols = [c for c in table_df.columns if c.startswith("alignment_") or c == "top_k_hit_rate"]
     for col in float_cols:
         table_df[col] = table_df[col].map(lambda v: f"{v:.4f}" if pd.notna(v) else "")
-    table_markdown = table_df.to_markdown(index=False)
+    table_markdown = _dataframe_to_markdown_table(table_df)
 
     return "\n".join(
         [

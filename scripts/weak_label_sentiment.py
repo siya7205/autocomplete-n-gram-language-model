@@ -1,11 +1,16 @@
 import argparse
 import csv
 import random
+import sys
 from collections import Counter
 from pathlib import Path
 from typing import Dict, Iterable, List, Sequence
 
 import pandas as pd
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 from autocomplete.datasets import load_corpus_rows
 from autocomplete.preprocess import tokenize
@@ -25,11 +30,17 @@ POS_WORDS = {
     "delight",
     "enjoy",
     "excellent",
+    "fair",
     "fantastic",
+    "friend",
+    "gentle",
     "good",
+    "grace",
     "great",
     "happy",
+    "heaven",
     "joy",
+    "joyful",
     "kind",
     "like",
     "love",
@@ -39,30 +50,56 @@ POS_WORDS = {
     "perfect",
     "pleasant",
     "positive",
+    "peace",
+    "praise",
     "smile",
     "strong",
     "success",
     "sweet",
     "terrific",
+    "virtue",
     "wonderful",
 }
 
 NEG_WORDS = {
+    "alas",
     "angry",
     "awful",
     "bad",
+    "banish",
+    "banished",
+    "betray",
+    "blood",
     "boring",
     "broken",
+    "bloody",
+    "cold",
+    "curse",
     "cruel",
+    "cry",
     "damage",
     "dark",
+    "dead",
+    "death",
+    "died",
+    "die",
     "disappoint",
     "disaster",
+    "doom",
+    "dread",
+    "enemy",
+    "evil",
     "fail",
     "fear",
+    "foul",
+    "grief",
     "hate",
+    "hell",
     "horrible",
     "hurt",
+    "kill",
+    "mad",
+    "murder",
     "loss",
     "negative",
     "pain",
@@ -71,11 +108,20 @@ NEG_WORDS = {
     "rough",
     "sad",
     "scared",
+    "sin",
+    "sorrow",
     "stress",
     "terrible",
     "toxic",
+    "tyrant",
     "ugly",
+    "villain",
+    "violent",
+    "war",
+    "wars",
     "weak",
+    "weep",
+    "woe",
     "worse",
     "worst",
 }
@@ -256,3 +302,12 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+    "wicked",
+    "threat",
+    "torment",
+    "sick",
+    "sickness",
+    "rage",
+    "grave",
+    "despair",
+    "danger",

@@ -1,0 +1,110 @@
+[
+  {
+    "top_k": 1,
+    "sentiment_weight": 0.0,
+    "top_k_hit_rate": 0.175,
+    "examples_used": 80,
+    "alignment_positive": 0.95,
+    "alignment_negative": 0.05,
+    "alignment_neutral": null
+  },
+  {
+    "top_k": 1,
+    "sentiment_weight": 0.5,
+    "top_k_hit_rate": 0.175,
+    "examples_used": 80,
+    "alignment_positive": 0.95,
+    "alignment_negative": 0.05,
+    "alignment_neutral": null
+  },
+  {
+    "top_k": 1,
+    "sentiment_weight": 1.0,
+    "top_k_hit_rate": 0.175,
+    "examples_used": 80,
+    "alignment_positive": 0.95,
+    "alignment_negative": 0.05,
+    "alignment_neutral": null
+  },
+  {
+    "top_k": 1,
+    "sentiment_weight": 2.0,
+    "top_k_hit_rate": 0.175,
+    "examples_used": 80,
+    "alignment_positive": 0.95,
+    "alignment_negative": 0.05,
+    "alignment_neutral": null
+  },
+  {
+    "top_k": 3,
+    "sentiment_weight": 0.0,
+    "top_k_hit_rate": 0.25,
+    "examples_used": 80,
+    "alignment_positive": 0.9625,
+    "alignment_negative": 0.0375,
+    "alignment_neutral": null
+  },
+  {
+    "top_k": 3,
+    "sentiment_weight": 0.5,
+    "top_k_hit_rate": 0.25,
+    "examples_used": 80,
+    "alignment_positive": 0.9625,
+    "alignment_negative": 0.0375,
+    "alignment_neutral": null
+  },
+  {
+    "top_k": 3,
+    "sentiment_weight": 1.0,
+    "top_k_hit_rate": 0.25,
+    "examples_used": 80,
+    "alignment_positive": 0.9625,
+    "alignment_negative": 0.0375,
+    "alignment_neutral": null
+  },
+  {
+    "top_k": 3,
+    "sentiment_weight": 2.0,
+    "top_k_hit_rate": 0.25,
+    "examples_used": 80,
+    "alignment_positive": 0.9625,
+    "alignment_negative": 0.0375,
+    "alignment_neutral": null
+  },
+  {
+    "top_k": 5,
+    "sentiment_weight": 0.0,
+    "top_k_hit_rate": 0.25,
+    "examples_used": 80,
+    "alignment_positive": 0.9625,
+    "alignment_negative": 0.0375,
+    "alignment_neutral": null
+  },
+  {
+    "top_k": 5,
+    "sentiment_weight": 0.5,
+    "top_k_hit_rate": 0.25,
+    "examples_used": 80,
+    "alignment_positive": 0.9625,
+    "alignment_negative": 0.0375,
+    "alignment_neutral": null
+  },
+  {
+    "top_k": 5,
+    "sentiment_weight": 1.0,
+    "top_k_hit_rate": 0.25,
+    "examples_used": 80,
+    "alignment_positive": 0.9625,
+    "alignment_negative": 0.0375,
+    "alignment_neutral": null
+  },
+  {
+    "top_k": 5,
+    "sentiment_weight": 2.0,
+    "top_k_hit_rate": 0.25,
+    "examples_used": 80,
+    "alignment_positive": 0.9625,
+    "alignment_negative": 0.0375,
+    "alignment_neutral": null
+  }
+]
