@@ -104,13 +104,13 @@ def train_sentiment_model(csv_path: str, model_out_path: str, seed: int = 42) ->
     }
 
 
-def load_sentiment_model(model_path: str):
+def load_sentiment_model(model_path: str) -> Pipeline:
     return joblib.load(model_path)
 
 
 def predict_sentiment(
     text: str,
-    model=None,
+    model: Optional[Pipeline] = None,
     model_path: str = "models/sentiment.pkl",
 ) -> Tuple[str, Dict[str, float]]:
     loaded_model = model if model is not None else load_sentiment_model(model_path)
