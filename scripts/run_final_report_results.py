@@ -23,8 +23,8 @@ from autocomplete.evaluate import (
 from autocomplete.sentiment import load_sentiment_model
 
 
-TOP_K_SWEEP = [1, 3, 5]
-SENTIMENT_WEIGHT_SWEEP = [0.0, 0.5, 1.0, 2.0]
+TOP_K_SWEEP_DEFAULT = [1, 3, 5]
+SENTIMENT_WEIGHT_SWEEP_DEFAULT = [0.0, 0.5, 1.0, 2.0]
 SUPPORTED_SENTIMENTS = ("positive", "negative", "neutral")
 
 
@@ -55,6 +55,20 @@ def _build_parser() -> argparse.ArgumentParser:
         default=2,
         help="Minimum token frequency kept in LM vocabulary.",
     )
+    parser.add_argument(
+        "--top-k-values",
+        type=int,
+        nargs="+",
+        default=TOP_K_SWEEP_DEFAULT,
+        help="Sweep values for top_k (default: 1 3 5).",
+    )
+    parser.add_argument(
+        "--sentiment-weight-values",
+        type=float,
+        nargs="+",
+        default=SENTIMENT_WEIGHT_SWEEP_DEFAULT,
+        help="Sweep values for sentiment_weight (default: 0.0 0.5 1.0 2.0).",
+    )
     return parser
 
 
@@ -64,13 +78,15 @@ def _make_summary_rows(
     vocabulary,
     prefix_tokens_list,
     sentiment_model,
+    top_k_values: List[int],
+    sentiment_weight_values: List[float],
     seed: int,
     max_examples: int,
 ) -> List[Dict[str, float | int | None]]:
     rows: List[Dict[str, float | int | None]] = []
 
-    for top_k in TOP_K_SWEEP:
-        for sentiment_weight in SENTIMENT_WEIGHT_SWEEP:
+    for top_k in top_k_values:
+        for sentiment_weight in sentiment_weight_values:
             top_k_metrics = _evaluate_top_k_hit_rate(
                 test_data=test_data,
                 n_gram_counts_list=n_gram_counts_list,
@@ -116,7 +132,9 @@ def _save_tables(summary_df: pd.DataFrame, outdir: Path) -> None:
 
 def _plot_topk_hit_rate(summary_df: pd.DataFrame, outdir: Path) -> None:
     plt.figure(figsize=(8, 5))
-    for sentiment_weight in SENTIMENT_WEIGHT_SWEEP:
+    sentiment_weight_values = sorted(summary_df["sentiment_weight"].unique().tolist())
+    top_k_values = sorted(summary_df["top_k"].unique().tolist())
+    for sentiment_weight in sentiment_weight_values:
         subset = summary_df[summary_df["sentiment_weight"] == sentiment_weight].sort_values("top_k")
         if subset.empty:
             continue
@@ -129,7 +147,7 @@ def _plot_topk_hit_rate(summary_df: pd.DataFrame, outdir: Path) -> None:
     plt.title("Top-k Hit Rate vs top_k")
     plt.xlabel("top_k")
     plt.ylabel("top-k hit rate")
-    plt.xticks(TOP_K_SWEEP)
+    plt.xticks(top_k_values)
     plt.grid(True, alpha=0.3)
     plt.legend()
     plt.tight_layout()
@@ -138,23 +156,24 @@ def _plot_topk_hit_rate(summary_df: pd.DataFrame, outdir: Path) -> None:
 
 
 def _plot_sentiment_alignment(summary_df: pd.DataFrame, outdir: Path) -> None:
-    alignment_cols = {
+    alignment_col_map = {
         "positive": "alignment_positive",
         "negative": "alignment_negative",
         "neutral": "alignment_neutral",
     }
-    grouped = summary_df.groupby("sentiment_weight", as_index=False).mean(numeric_only=True)
+    alignment_value_cols = [col for col in alignment_col_map.values() if col in summary_df.columns]
+    grouped = summary_df.groupby("sentiment_weight", as_index=False)[alignment_value_cols].mean()
 
     plt.figure(figsize=(8, 5))
     for sentiment in ("positive", "negative", "neutral"):
-        col = alignment_cols[sentiment]
+        col = alignment_col_map[sentiment]
         if col not in grouped.columns or grouped[col].isna().all():
             continue
         plt.plot(grouped["sentiment_weight"], grouped[col], marker="o", label=sentiment)
     plt.title("Sentiment Alignment Rate vs sentiment_weight")
     plt.xlabel("sentiment_weight")
     plt.ylabel("alignment rate")
-    plt.xticks(SENTIMENT_WEIGHT_SWEEP)
+    plt.xticks(sorted(grouped["sentiment_weight"].tolist()))
     plt.grid(True, alpha=0.3)
     plt.legend()
     plt.tight_layout()
@@ -172,6 +191,7 @@ def _build_report_snippet(
     corpus_path: Path,
     sentiment_csv_path: Path,
     sentiment_model_path: Path,
+    generated_at: str,
 ) -> str:
     alignment_metric_cols = ["alignment_positive", "alignment_negative"]
     if "alignment_neutral" in summary_df.columns and not summary_df["alignment_neutral"].isna().all():
@@ -197,6 +217,7 @@ def _build_report_snippet(
             f"- Corpus: `{corpus_path}`",
             f"- Sentiment CSV: `{sentiment_csv_path}`",
             f"- Sentiment model: `{sentiment_model_path}`",
+            f"- Generated at (UTC): `{generated_at}`",
             "",
             "## Best observed configurations",
             (
@@ -223,6 +244,10 @@ def run(args: argparse.Namespace) -> int:
         raise ValueError("--train-fraction must be greater than 0 and less than 1.")
     if args.minimum_freq < 1:
         raise ValueError("--minimum-freq must be at least 1.")
+    if not args.top_k_values or any(value < 1 for value in args.top_k_values):
+        raise ValueError("--top-k-values must contain one or more integers >= 1.")
+    if not args.sentiment_weight_values:
+        raise ValueError("--sentiment-weight-values must contain one or more values.")
 
     corpus_path = Path(args.corpus)
     sentiment_csv_path = Path(args.sentiment_csv)
@@ -259,6 +284,8 @@ def run(args: argparse.Namespace) -> int:
         vocabulary=vocabulary,
         prefix_tokens_list=prefix_tokens_list,
         sentiment_model=sentiment_model,
+        top_k_values=args.top_k_values,
+        sentiment_weight_values=args.sentiment_weight_values,
         seed=args.seed,
         max_examples=args.max_examples,
     )
@@ -268,16 +295,17 @@ def run(args: argparse.Namespace) -> int:
     _plot_topk_hit_rate(summary_df, outdir)
     _plot_sentiment_alignment(summary_df, outdir)
 
+    generated_at = datetime.now(timezone.utc).isoformat()
     report_snippet = _build_report_snippet(
         summary_df=summary_df,
         corpus_path=corpus_path,
         sentiment_csv_path=sentiment_csv_path,
         sentiment_model_path=sentiment_model_path,
+        generated_at=generated_at,
     )
     (outdir / "REPORT_SNIPPET.md").write_text(report_snippet, encoding="utf-8")
 
-    created_at = datetime.now(timezone.utc).isoformat()
-    print(f"[{created_at}] Saved final report artifacts to {outdir}")
+    print(f"[{generated_at}] Saved final report artifacts to {outdir}")
     print(f"- {outdir / 'summary.csv'}")
     print(f"- {outdir / 'summary.json'}")
     print(f"- {outdir / 'topk_hit_rate.png'}")
