@@ -264,7 +264,7 @@ Supported sentiment modes:
 - `--sentiment positive|negative|neutral`: rerank with the sentiment classifier.
 
 Reranking uses a simple combined score:
-- `final_score = lm_score + sentiment_weight * sentiment_prob(target)`
+- `final_score = lm_score + sentiment_weight * sentiment_probability[target_sentiment]`
 
 Tune reranking strength with `--sentiment-weight` (alias `--lambda`):
 

@@ -91,7 +91,7 @@ def rerank_with_sentiment(
     scored = []
     for word, lm_score in suggestions:
         candidate_text = f"{prefix_text} {word}".strip()
-        predicted_label, sentiment_scores = predict_sentiment(text=candidate_text, model=model)
+        _, sentiment_scores = predict_sentiment(text=candidate_text, model=model)
         if neutral_fallback:
             target_score = 0.0
             final_score = float(lm_score)
@@ -99,8 +99,8 @@ def rerank_with_sentiment(
             target_score = float(sentiment_scores.get(target_sentiment, 0.0))
             final_score = float(lm_score) + sentiment_weight * target_score
         else:
-            target_score = float(str(predicted_label).lower() == target_sentiment)
-            final_score = float(lm_score) + sentiment_weight * target_score
+            target_score = 0.0
+            final_score = float(lm_score)
 
         scored.append(
             {
