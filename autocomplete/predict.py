@@ -1,27 +1,13 @@
 import argparse
-import random
 from pathlib import Path
 
-import nltk
-
-from data_preprocessing import get_tokenized_data, preprocess_data
+from autocomplete.datasets import load_train_test_split
+from autocomplete.preprocess import tokenize
+from data_preprocessing import preprocess_data
 from language_model import count_n_grams, get_suggestions
 
 
 DEFAULT_DATA_PATH = Path(__file__).resolve().parents[1] / "data" / "en_US.twitter.txt"
-RANDOM_SEED = 87
-
-
-def _ensure_nltk_tokenizer() -> None:
-    resources = [
-        ("tokenizers/punkt", "punkt"),
-        ("tokenizers/punkt_tab", "punkt_tab"),
-    ]
-    for resource_path, resource_name in resources:
-        try:
-            nltk.data.find(resource_path)
-        except LookupError:
-            nltk.download(resource_name, quiet=True)
 
 
 def train_model(data_path: Path, train_fraction: float = 0.8, minimum_freq: int = 2):
@@ -35,18 +21,13 @@ def train_model(data_path: Path, train_fraction: float = 0.8, minimum_freq: int 
     Returns:
         A tuple of (vocabulary, n_gram_counts_list).
     """
-    with open(data_path, "r", encoding="utf-8") as dataset_file:
-        data = dataset_file.read()
-
-    tokenized_data = get_tokenized_data(data)
-    random.seed(RANDOM_SEED)
-    random.shuffle(tokenized_data)
-
-    train_size = int(len(tokenized_data) * train_fraction)
-    train_data = tokenized_data[:train_size]
+    train_data, test_data = load_train_test_split(
+        data_path=data_path,
+        train_fraction=train_fraction,
+    )
 
     train_data_processed, _, vocabulary = preprocess_data(
-        train_data, tokenized_data[train_size:], minimum_freq
+        train_data, test_data, minimum_freq
     )
 
     n_gram_counts_list = []
@@ -72,10 +53,9 @@ def predict_next_words(text: str, top_k: int, data_path: Path, k_smoothing: floa
     Returns:
         List of (word, probability) tuples sorted by descending probability.
     """
-    _ensure_nltk_tokenizer()
     vocabulary, n_gram_counts_list = train_model(data_path=data_path)
 
-    tokens = nltk.word_tokenize(text.lower().strip())
+    tokens = tokenize(text)
     suggestions = get_suggestions(tokens, n_gram_counts_list, vocabulary, k_smoothing)
     sorted_suggestions = sorted(suggestions, key=lambda x: x[1], reverse=True)
     return sorted_suggestions[:top_k]
