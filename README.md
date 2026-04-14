@@ -340,6 +340,27 @@ Expected behavior:
 - If the sentiment model file is missing, the app shows a friendly message telling you to run:
   `python -m autocomplete.train_sentiment --csv <labeled_csv> --out models/sentiment.pkl`
 
+### Final report: generate results
+
+Run one command to produce sweep tables, plots, and a markdown snippet for your report:
+
+```bash
+python scripts/run_final_report_results.py \
+  --corpus data/en_US.twitter.txt \
+  --sentiment-csv data/sentiment_labeled.csv \
+  --model models/sentiment.pkl \
+  --outdir results/final \
+  --seed 42 \
+  --max-examples 500
+```
+
+Generated files in `results/final/`:
+- `summary.csv`: combined sweep table across `top_k in [1,3,5]` and `sentiment_weight in [0.0,0.5,1.0,2.0]`
+- `summary.json`: machine-readable version of the same table
+- `topk_hit_rate.png`: top-k hit rate vs `top_k` (one line per sentiment weight)
+- `sentiment_alignment.png`: sentiment alignment vs `sentiment_weight` (positive/negative and neutral if supported)
+- `REPORT_SNIPPET.md`: short report-ready markdown summary with best observed settings and a table
+
 ## Contributing
 
 We welcome contributions to this research project. Please see our [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines on how to submit issues, feature requests, and pull requests.
