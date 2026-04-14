@@ -1,6 +1,8 @@
 import argparse
 from pathlib import Path
+from typing import Iterable, Tuple
 
+from sklearn.pipeline import Pipeline
 from autocomplete.datasets import load_train_test_split
 from autocomplete.preprocess import tokenize
 from autocomplete.sentiment import load_sentiment_model, predict_sentiment
@@ -69,7 +71,7 @@ def predict_next_words(text: str, top_k: int, data_path: Path, k_smoothing: floa
 
 def rerank_with_sentiment(
     prefix_text: str,
-    suggestions,
+    suggestions: Iterable[Tuple[str, float]],
     target_sentiment: str,
     sentiment_model_path: str,
     sentiment_weight: float,
@@ -86,9 +88,9 @@ def rerank_with_sentiment(
 
 def rerank_with_sentiment_model(
     prefix_text: str,
-    suggestions,
+    suggestions: Iterable[Tuple[str, float]],
     target_sentiment: str,
-    model,
+    model: Pipeline,
     sentiment_weight: float,
 ):
     """Rerank LM suggestions using a preloaded sentiment model.
