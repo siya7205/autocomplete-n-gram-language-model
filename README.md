@@ -283,6 +283,36 @@ If `--sentiment` is enabled but the model file is missing, prediction exits with
 Neutral handling:
 - If `neutral` is requested but the trained model does not contain a `neutral` class, the command runs gracefully with reranking disabled for that request and prints a note.
 
+### Phase 4: evaluation + `results/metrics.json`
+
+Run the Phase 4 evaluator to compute:
+- **Autocomplete quality**: top-k hit rate on a held-out split from the corpus
+- **Sentiment alignment**: share of reranked suggestions whose predicted label matches the target sentiment
+
+```bash
+python -m autocomplete.evaluate \
+  --corpus data/en_US.twitter.txt \
+  --sentiment-csv data/sentiment_labeled.csv \
+  --top-k 5 \
+  --seed 42 \
+  --out results/metrics.json
+```
+
+Optional runtime cap:
+
+```bash
+python -m autocomplete.evaluate \
+  --corpus data/en_US.twitter.txt \
+  --sentiment-csv data/sentiment_labeled.csv \
+  --max-examples 300
+```
+
+Notes:
+- The script is reproducible with the same `--seed`.
+- `results/` is created automatically if missing.
+- The JSON includes run config, top-k hit-rate stats, per-sentiment alignment stats, and timestamp.
+- Alignment is computed as: predicted sentiment label of each suggested continuation equals the target sentiment.
+
 ## Contributing
 
 We welcome contributions to this research project. Please see our [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines on how to submit issues, feature requests, and pull requests.
