@@ -247,6 +247,42 @@ python -m autocomplete.sentiment_predict \
 
 The sentiment dataset can be small (for example 200–500 labeled rows), but model quality generally improves with more labeled examples.
 
+### Sentiment-aware autocomplete reranking (Phase 3)
+
+Use sentiment reranking to bias top-k next-word suggestions toward a target tone:
+
+```bash
+python -m autocomplete.predict \
+  --text "I feel" \
+  --top-k 5 \
+  --sentiment positive \
+  --sentiment-model models/sentiment.pkl
+```
+
+Supported sentiment modes:
+- `--sentiment off` (default): baseline LM ranking only (no reranking).
+- `--sentiment positive|negative|neutral`: rerank with the sentiment classifier.
+
+Reranking uses a simple combined score:
+- `final_score = lm_score + sentiment_weight * sentiment_prob(target)`
+
+Tune reranking strength with `--sentiment-weight` (alias `--lambda`):
+
+```bash
+python -m autocomplete.predict \
+  --text "I want to" \
+  --top-k 5 \
+  --sentiment negative \
+  --sentiment-weight 0.25
+```
+
+Larger weights increase sentiment influence; smaller weights keep suggestions closer to baseline LM order.
+
+If `--sentiment` is enabled but the model file is missing, prediction exits with an error telling you to train a model first.
+
+Neutral handling:
+- If `neutral` is requested but the trained model does not contain a `neutral` class, the command runs gracefully with reranking disabled for that request and prints a note.
+
 ## Contributing
 
 We welcome contributions to this research project. Please see our [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines on how to submit issues, feature requests, and pull requests.
