@@ -112,6 +112,8 @@ def _train_language_model(
     train_fraction: float,
     minimum_freq: int,
 ) -> Tuple[List[List[str]], List[List[str]], List[str], List[Dict[Tuple[str, ...], int]]]:
+    if not 0 < train_fraction < 1:
+        raise ValueError("train_fraction must be greater than 0 and less than 1.")
     tokenized_sentences = load_tokenized_sentences(corpus_path)
     train_data, test_data = split_train_test(
         tokenized_sentences=tokenized_sentences,
@@ -315,9 +317,16 @@ def evaluate(
         max_examples=max_examples,
         seed=seed,
     )
+    if top_k_metrics["examples_used"] == 0:
+        raise ValueError(
+            "No top-k evaluation examples were produced from the held-out corpus split. "
+            "Use a larger corpus, smaller --minimum-freq, or lower --train-fraction."
+        )
 
     sentiment_texts = _load_sentiment_texts(sentiment_csv_path)
     prefix_tokens_list = _collect_prefix_tokens(sentiment_texts, max_examples=max_examples, seed=seed)
+    if not prefix_tokens_list:
+        raise ValueError("No valid sentiment-evaluation prefixes found in sentiment CSV text rows.")
     model = load_sentiment_model(str(sentiment_model_path))
 
     sentiment_alignment = _evaluate_sentiment_alignment(
@@ -384,8 +393,8 @@ def main() -> None:
         raise ValueError("--top-k must be at least 1.")
     if args.max_examples < 1:
         raise ValueError("--max-examples must be at least 1.")
-    if not 0 < args.train_fraction <= 1:
-        raise ValueError("--train-fraction must be greater than 0 and at most 1.")
+    if not 0 < args.train_fraction < 1:
+        raise ValueError("--train-fraction must be greater than 0 and less than 1.")
     if args.minimum_freq < 1:
         raise ValueError("--minimum-freq must be at least 1.")
 
