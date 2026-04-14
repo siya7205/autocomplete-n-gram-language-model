@@ -114,13 +114,15 @@ def predict_sentiment(
     model_path: str = "models/sentiment.pkl",
 ) -> Tuple[str, Dict[str, float]]:
     loaded_model = model if model is not None else load_sentiment_model(model_path)
+    normalized_text = normalize_text(text)
 
-    prediction = str(loaded_model.predict([text])[0])
+    prediction = str(loaded_model.predict([normalized_text])[0])
     scores: Dict[str, float] = {}
 
-    if hasattr(loaded_model, "predict_proba"):
-        probabilities = loaded_model.predict_proba([text])[0]
-        classes = [str(label) for label in loaded_model.named_steps["classifier"].classes_]
+    classifier = loaded_model.named_steps["classifier"]
+    if hasattr(classifier, "predict_proba"):
+        probabilities = loaded_model.predict_proba([normalized_text])[0]
+        classes = [str(label) for label in classifier.classes_]
         scores = {label: float(prob) for label, prob in zip(classes, probabilities)}
 
     return prediction, scores
