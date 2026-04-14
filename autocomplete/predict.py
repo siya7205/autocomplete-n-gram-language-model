@@ -9,6 +9,11 @@ from language_model import count_n_grams, get_suggestions
 
 
 DEFAULT_DATA_PATH = Path(__file__).resolve().parents[1] / "data" / "en_US.twitter.txt"
+RANK_WIDTH = 6
+WORD_WIDTH = 18
+LM_SCORE_WIDTH = 12
+SENTIMENT_WIDTH = 14
+FINAL_WIDTH = 14
 
 
 def train_model(data_path: Path, train_fraction: float = 0.8, minimum_freq: int = 2):
@@ -193,11 +198,20 @@ def main() -> None:
             f'Note: model labels are {model_labels}; "neutral" is unavailable, so reranking is disabled '
             "for this request."
         )
-    print(f"{'Rank':<6}{'Word':<18}{'LM score':>12}{'Sentiment':>14}{'Final':>14}")
+    print(
+        f"{'Rank':<{RANK_WIDTH}}"
+        f"{'Word':<{WORD_WIDTH}}"
+        f"{'LM score':>{LM_SCORE_WIDTH}}"
+        f"{'Sentiment':>{SENTIMENT_WIDTH}}"
+        f"{'Final':>{FINAL_WIDTH}}"
+    )
     for rank, row in enumerate(reranked, start=1):
         print(
-            f"{rank:<6}{row['word']:<18}{row['lm_score']:>12.6f}"
-            f"{row['sentiment_score']:>14.6f}{row['final_score']:>14.6f}"
+            f"{rank:<{RANK_WIDTH}}"
+            f"{row['word']:<{WORD_WIDTH}}"
+            f"{row['lm_score']:>{LM_SCORE_WIDTH}.6f}"
+            f"{row['sentiment_score']:>{SENTIMENT_WIDTH}.6f}"
+            f"{row['final_score']:>{FINAL_WIDTH}.6f}"
         )
 
 
