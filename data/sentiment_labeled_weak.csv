@@ -1,0 +1,156 @@
+id,text,sentiment_label,notes
+3,If thou couldst answer 'This fair child of mine,positive,weak_lexicon;pos_count=1;neg_count=0
+4,"Then what could death do if thou shouldst depart,",negative,weak_lexicon;pos_count=0;neg_count=1
+8,"And our dear love lose name of single one,",positive,weak_lexicon;pos_count=1;neg_count=0
+16,But bears it out even to the edge of doom:,negative,weak_lexicon;pos_count=0;neg_count=1
+18,father. He that so generally is at all times good must of,positive,weak_lexicon;pos_count=1;neg_count=0
+25,The help of heaven we count the act of men.,positive,weak_lexicon;pos_count=1;neg_count=0
+27,Who shuns thy love shuns all his love in me.,positive,weak_lexicon;pos_count=2;neg_count=0
+28,"Where great additions swell's, and virtue none,",positive,weak_lexicon;pos_count=2;neg_count=0
+29,"BERTRAM. I cannot love her, nor will strive to do 't.",positive,weak_lexicon;pos_count=1;neg_count=0
+35,"Of the great Count himself, she is too mean",positive,weak_lexicon;pos_count=1;neg_count=0
+43,"DIANA. Sir, much like",positive,weak_lexicon;pos_count=1;neg_count=0
+44,"I'll love her dearly, ever, ever dearly.",positive,weak_lexicon;pos_count=1;neg_count=0
+63,"Sweep your way for you. Pray you look not sad,",negative,weak_lexicon;pos_count=0;neg_count=1
+67,"THIRD SOLDIER. Peace, I say!",positive,weak_lexicon;pos_count=1;neg_count=0
+68,"SCARUS. I had a wound here that was like a T,",positive,weak_lexicon;pos_count=1;neg_count=0
+74,"Reliev'd, but not betray'd.",negative,weak_lexicon;pos_count=0;neg_count=1
+76,It shall content me best. Be gentle to her.,positive,weak_lexicon;pos_count=2;neg_count=0
+84,"There is a vent of blood, and something blown;",negative,weak_lexicon;pos_count=0;neg_count=1
+88,"CELIA. O, a good wish upon you! You will try in time, in despite of",positive,weak_lexicon;pos_count=1;neg_count=0
+94,"ORLANDO. I almost die for food, and let me have it.",negative,weak_lexicon;pos_count=0;neg_count=1
+100,The sight of lovers feedeth those in love.,positive,weak_lexicon;pos_count=1;neg_count=0
+101,To glean the broken ears after the man,negative,weak_lexicon;pos_count=0;neg_count=1
+107,Whilst I had been like heedful of the other.,positive,weak_lexicon;pos_count=1;neg_count=0
+127,"What's done i' th' Capitol, who's like to rise,",positive,weak_lexicon;pos_count=1;neg_count=0
+141,MENENIUS. Let's be calm.,positive,weak_lexicon;pos_count=1;neg_count=0
+146,"BRUTUS. There's no more to be said, but he is banish'd,",negative,weak_lexicon;pos_count=0;neg_count=1
+157,milk in a male tiger; that shall our poor city find. And all this,negative,weak_lexicon;pos_count=0;neg_count=1
+160,IMOGEN. Your son's my father's friend; he takes his part,positive,weak_lexicon;pos_count=1;neg_count=0
+162,"Have turn'd mine eye and wept. But, good Pisanio,",positive,weak_lexicon;pos_count=1;neg_count=0
+167,Which not to read would show the Britons cold;,negative,weak_lexicon;pos_count=0;neg_count=1
+188,best use of eyes to see the way of blindness! I am sure hanging's,positive,weak_lexicon;pos_count=1;neg_count=0
+201,"reckon my groans; but that I love thee best, O most best, believe",positive,weak_lexicon;pos_count=3;neg_count=0
+254,"Upon the foot of fear, fled with the rest;",negative,weak_lexicon;pos_count=0;neg_count=1
+256,"With joyful tidings; and, being better hors'd,",positive,weak_lexicon;pos_count=1;neg_count=0
+257,And that young Harry Percy's spur was cold.,negative,weak_lexicon;pos_count=0;neg_count=1
+260,brought in to his answer. A hundred mark is a long one for a poor,negative,weak_lexicon;pos_count=0;neg_count=1
+262,"troth, I do now remember the poor creature, small beer. But",negative,weak_lexicon;pos_count=0;neg_count=1
+263,"And be, like them, to Percy troublesome.",positive,weak_lexicon;pos_count=1;neg_count=0
+267,WARWICK. Many good morrows to your Majesty!,positive,weak_lexicon;pos_count=1;neg_count=0
+268,"'The time will come that foul sin, gathering head,",negative,weak_lexicon;pos_count=0;neg_count=2
+269,FALSTAFF. Thy mother's son! Like enough; and thy father's shadow.,positive,weak_lexicon;pos_count=1;neg_count=0
+270,"FALSTAFF. Come, thou shalt go to the wars in a gown. We will have",negative,weak_lexicon;pos_count=0;neg_count=1
+271,"WESTMORELAND. Health and fair greeting from our general,",positive,weak_lexicon;pos_count=1;neg_count=0
+277,"PRINCE. If he be sick with joy, he'll recover without physic.",positive,weak_lexicon;pos_count=1;neg_count=0
+286,And shall good news be baffled?,positive,weak_lexicon;pos_count=1;neg_count=0
+289,"I have long dreamt of such a kind of man,",positive,weak_lexicon;pos_count=1;neg_count=0
+295,WESTMORELAND. They know your Grace hath cause and means and might-,positive,weak_lexicon;pos_count=1;neg_count=0
+307,am afeard there are few die well that die in a battle; for how,negative,weak_lexicon;pos_count=0;neg_count=2
+311,"What drink'st thou oft, instead of homage sweet,",positive,weak_lexicon;pos_count=1;neg_count=0
+313,"Two chantries, where the sad and solemn priests",negative,weak_lexicon;pos_count=0;neg_count=1
+354,"But him outlive, and die a violent death.'",negative,weak_lexicon;pos_count=0;neg_count=3
+364,"QUEEN. O Henry, let me plead for gentle Suffolk!",positive,weak_lexicon;pos_count=1;neg_count=0
+365,"Ay, every joint should seem to curse and ban;",negative,weak_lexicon;pos_count=0;neg_count=1
+377,"YORK. Richard, enough; I will be King, or die.",negative,weak_lexicon;pos_count=0;neg_count=1
+386,"Poor queen and son, your labour is but lost;",negative,weak_lexicon;pos_count=0;neg_count=1
+388,"KING EDWARD. Now tell me, madam, do you love your children?",positive,weak_lexicon;pos_count=1;neg_count=0
+390,"LEWIS. Why, say, fair Queen, whence springs this deep despair?",positive,weak_lexicon;pos_count=1;neg_count=0
+399,"QUEEN MARGARET. O Ned, sweet Ned, speak to thy mother, boy!",positive,weak_lexicon;pos_count=1;neg_count=0
+402,A new hell in himself.,negative,weak_lexicon;pos_count=0;neg_count=1
+418,"So excellent in art, and still so rising,",positive,weak_lexicon;pos_count=1;neg_count=0
+420,"As you wish Christian peace to souls departed,",positive,weak_lexicon;pos_count=1;neg_count=0
+424,"Shall then be his, and like a vine grow to him;",positive,weak_lexicon;pos_count=1;neg_count=0
+427,Upon the maiden virtue of the crown.,positive,weak_lexicon;pos_count=1;neg_count=0
+439,Than keep in peace that hand which thou dost hold.,positive,weak_lexicon;pos_count=1;neg_count=0
+440,"ARTHUR. Alas, what need you be so boist'rous rough?",negative,weak_lexicon;pos_count=0;neg_count=2
+444,And with a great heart heave away this storm;,positive,weak_lexicon;pos_count=1;neg_count=0
+445,"And like a bated and retired flood,",positive,weak_lexicon;pos_count=1;neg_count=0
+448,Shake off their sterile curse.,negative,weak_lexicon;pos_count=0;neg_count=1
+452,"BRUTUS. That you do love me, I am nothing jealous;",positive,weak_lexicon;pos_count=1;neg_count=0
+460,"O constancy, be strong upon my side!",positive,weak_lexicon;pos_count=1;neg_count=0
+463,"METELLUS. Stand fast together, lest some friend of Caesar's",positive,weak_lexicon;pos_count=1;neg_count=0
+469,"BRUTUS. Good night, good brother.",positive,weak_lexicon;pos_count=2;neg_count=0
+474,"Lear. Peace, Kent!",positive,weak_lexicon;pos_count=1;neg_count=0
+504,"To his great master; who, thereat enrag'd,",positive,weak_lexicon;pos_count=1;neg_count=0
+510,"Forc'd to cry out. Where I could not be honest,",negative,weak_lexicon;pos_count=0;neg_count=1
+518,"When, for fame's sake, for praise, an outward part,",positive,weak_lexicon;pos_count=1;neg_count=0
+522,So ridest thou triumphing in my woe.,negative,weak_lexicon;pos_count=0;neg_count=1
+524,Dares look upon the heaven of her brow,positive,weak_lexicon;pos_count=1;neg_count=0
+526,"For valour, is not Love a Hercules,",positive,weak_lexicon;pos_count=1;neg_count=0
+537,"Form'd by the eye and therefore, like the eye,",positive,weak_lexicon;pos_count=1;neg_count=0
+552,A modern ecstasy. The dead man's knell,negative,weak_lexicon;pos_count=0;neg_count=1
+553,"DOCTOR. A great perturbation in nature, to receive at once the",positive,weak_lexicon;pos_count=1;neg_count=0
+563,ESCALUS. It grieves me for the death of Claudio;,negative,weak_lexicon;pos_count=0;neg_count=1
+572,"LUCIO. That's I, an't like your Grace.",positive,weak_lexicon;pos_count=2;neg_count=0
+573,PETER. Blessed be your royal Grace!,positive,weak_lexicon;pos_count=1;neg_count=0
+577,"Immediate sentence then, and sequent death,",negative,weak_lexicon;pos_count=0;neg_count=1
+587,"Let it presage the ruin of your love,",positive,weak_lexicon;pos_count=1;neg_count=0
+590,And you in love shall not deny me this.,positive,weak_lexicon;pos_count=1;neg_count=0
+596,"SHALLOW. Cousin Abraham Slender, can you love her?",positive,weak_lexicon;pos_count=1;neg_count=0
+601,"Or any kind of light,",positive,weak_lexicon;pos_count=1;neg_count=0
+604,"SHALLOW. I follow, mine host, I follow. Good even and",positive,weak_lexicon;pos_count=1;neg_count=0
+606,have brought her into such a canaries as 'tis wonderful.,positive,weak_lexicon;pos_count=1;neg_count=0
+609,"deserves it; for if there be a kind woman in Windsor, she",positive,weak_lexicon;pos_count=1;neg_count=0
+616,I should love thee but as a property.,positive,weak_lexicon;pos_count=1;neg_count=0
+629,"THESEUS. Thanks, good Egeus; what's the news with thee?",positive,weak_lexicon;pos_count=1;neg_count=0
+630,"THESEUS. What say you, Hermia? Be advis'd, fair maid.",positive,weak_lexicon;pos_count=1;neg_count=0
+641,"Save that, in love unto Demetrius,",positive,weak_lexicon;pos_count=1;neg_count=0
+646,Which Lion vile with bloody mouth did stain.,negative,weak_lexicon;pos_count=0;neg_count=1
+648,"To the best bride-bed will we,",positive,weak_lexicon;pos_count=1;neg_count=0
+656,"lady is fair--'tis a truth, I can bear them witness; and virtuous",positive,weak_lexicon;pos_count=1;neg_count=0
+665,Wash'd it with tears? Hence from her! let her die.,negative,weak_lexicon;pos_count=0;neg_count=1
+666,"Bora. Sweet Prince, let me go no farther to mine answer. Do you",positive,weak_lexicon;pos_count=1;neg_count=0
+667,"Claud. Sweet Hero, now thy image doth appear",positive,weak_lexicon;pos_count=1;neg_count=0
+669,When he would play the noble beast in love.,positive,weak_lexicon;pos_count=1;neg_count=0
+672,BRABANTIO.              Humbly I thank your Grace.,positive,weak_lexicon;pos_count=1;neg_count=0
+678,"In mine own comforts. I prithee, good Iago,",positive,weak_lexicon;pos_count=1;neg_count=0
+685,Burn like the mines of sulphur. I did say so.,positive,weak_lexicon;pos_count=1;neg_count=0
+686,IAGO.                O grace! O heaven defend me!,positive,weak_lexicon;pos_count=2;neg_count=0
+691,OTHELLO. I am glad to see you mad.,negative,weak_lexicon;pos_count=0;neg_count=1
+700,The swelling difference of your settled hate;,negative,weak_lexicon;pos_count=0;neg_count=1
+704,Is now leas'd out-I die pronouncing it-,negative,weak_lexicon;pos_count=0;neg_count=1
+705,Of noble blood in this declining land.,negative,weak_lexicon;pos_count=0;neg_count=1
+706,"BUSHY. Madam, your Majesty is too much sad.",negative,weak_lexicon;pos_count=0;neg_count=1
+716,BOLINGBROKE. Sweet peace conduct his sweet soul to the bosom,positive,weak_lexicon;pos_count=3;neg_count=0
+726,"Told the sad story of my father's death,",negative,weak_lexicon;pos_count=0;neg_count=2
+727,Stabb'd in my angry mood at Tewksbury?,negative,weak_lexicon;pos_count=0;neg_count=1
+729,Can curses pierce the clouds and enter heaven?,positive,weak_lexicon;pos_count=1;neg_count=0
+735,And make me happy in your unity.,positive,weak_lexicon;pos_count=1;neg_count=0
+739,"For my part, I'll resign unto your Grace",positive,weak_lexicon;pos_count=1;neg_count=0
+745,"MAYOR. But, my good lord, your Grace's words shall serve",positive,weak_lexicon;pos_count=2;neg_count=0
+746,"His Grace not being warn'd thereof before,",positive,weak_lexicon;pos_count=1;neg_count=0
+749,"DORSET. Be of good cheer; mother, how fares your Grace?",positive,weak_lexicon;pos_count=2;neg_count=0
+750,"QUEEN ELIZABETH. Poor heart, adieu! I pity thy complaining.",negative,weak_lexicon;pos_count=0;neg_count=1
+769,Your lives shall pay the forfeit of the peace.,positive,weak_lexicon;pos_count=1;neg_count=0
+779,Rom. I pray thee chide not. She whom I love now,positive,weak_lexicon;pos_count=1;neg_count=0
+804,"GREMIO. Yea, leave that labour to great Hercules,",positive,weak_lexicon;pos_count=1;neg_count=0
+808,"considering the weather, a taller man than I will take cold.",negative,weak_lexicon;pos_count=0;neg_count=1
+818,TRANIO. Then thou wert best say that I am not Lucentio.,positive,weak_lexicon;pos_count=1;neg_count=0
+822,Her new-built virtue and obedience.,positive,weak_lexicon;pos_count=1;neg_count=0
+833,"Did quarrel with the noblest grace she ow'd,",positive,weak_lexicon;pos_count=1;neg_count=0
+835,"GONZALO. All three of them are desperate; their great guilt,",positive,weak_lexicon;pos_count=1;neg_count=0
+843,"Upon his good and gracious nature hanging,",positive,weak_lexicon;pos_count=1;neg_count=0
+845,TIMON. Love you the maid?,positive,weak_lexicon;pos_count=1;neg_count=0
+854,will set him clear. How fairly this lord strives to appear foul!,negative,weak_lexicon;pos_count=0;neg_count=1
+857,We banish thee for ever.,negative,weak_lexicon;pos_count=0;neg_count=1
+868,"Of contumelious, beastly, mad-brain'd war,",negative,weak_lexicon;pos_count=0;neg_count=1
+871,Upon the Thracian tyrant in his tent,negative,weak_lexicon;pos_count=0;neg_count=1
+878,"Of this deep pit, poor Bassianus' grave.",negative,weak_lexicon;pos_count=0;neg_count=1
+879,"SATURNINUS. Here, Tamora; though griev'd with killing grief.",negative,weak_lexicon;pos_count=0;neg_count=1
+881,Rome could afford no tribunes like to these.,positive,weak_lexicon;pos_count=1;neg_count=0
+882,And they have nurs'd this woe in feeding life;,negative,weak_lexicon;pos_count=0;neg_count=1
+883,"Do, then, dear heart; for heaven shall hear our prayers,",positive,weak_lexicon;pos_count=1;neg_count=0
+892,"TAMORA. Know thou, sad man, I am not Tamora:",negative,weak_lexicon;pos_count=0;neg_count=1
+906,"My thoughts were like unbridled children, grown",positive,weak_lexicon;pos_count=1;neg_count=0
+925,How poor Andromache shrills her dolours forth;,negative,weak_lexicon;pos_count=0;neg_count=1
+928,"TROILUS. He's dead, and at the murderer's horse's tail,",negative,weak_lexicon;pos_count=0;neg_count=1
+934,My poor corpse where my bones shall be thrown;,negative,weak_lexicon;pos_count=0;neg_count=1
+944,"Injurious wasps, to feed on such sweet honey",positive,weak_lexicon;pos_count=1;neg_count=0
+946,"VALENTINE. Why, how know you that I am in love?",positive,weak_lexicon;pos_count=1;neg_count=0
+955,one knave. He lives not now that knows me to be in love; yet I am,positive,weak_lexicon;pos_count=1;neg_count=0
+965,"How like, methought, I then was to this kernel,",positive,weak_lexicon;pos_count=1;neg_count=0
+972,From your good Queen.,positive,weak_lexicon;pos_count=1;neg_count=0
+979,For the red blood reigns in the winter's pale.,negative,weak_lexicon;pos_count=0;neg_count=1
+981,"tell, good sir, for which of his virtues it was, but he was",positive,weak_lexicon;pos_count=1;neg_count=0
+997,Standing like stone with thee!,positive,weak_lexicon;pos_count=1;neg_count=0

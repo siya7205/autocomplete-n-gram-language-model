@@ -1,10 +1,12 @@
 import argparse
 import json
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional, Union
 
+import matplotlib
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -14,13 +16,13 @@ if str(REPO_ROOT) not in sys.path:
 
 from autocomplete.evaluate import (
     _collect_prefix_tokens,
-    _ensure_inputs,
     _evaluate_sentiment_alignment,
     _evaluate_top_k_hit_rate,
     _load_sentiment_texts,
     _train_language_model,
 )
-from autocomplete.sentiment import load_sentiment_model
+from autocomplete.sentiment import load_sentiment_model, train_sentiment_model
+from scripts.weak_label_sentiment import generate_weak_labels
 
 
 TOP_K_SWEEP_DEFAULT = [1, 3, 5]
@@ -30,11 +32,22 @@ SUPPORTED_SENTIMENTS = ("positive", "negative", "neutral")
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Run the final report sweep and save summary tables, plots, and markdown snippet."
+        description=(
+            "Run weak-labeling (optional), train sentiment model, and generate final report artifacts "
+            "(sweep tables, plots, markdown snippet)."
+        )
     )
     parser.add_argument("--corpus", required=True, help="Path to corpus text file.")
-    parser.add_argument("--sentiment-csv", required=True, help="Path to labeled sentiment CSV.")
-    parser.add_argument("--model", default="models/sentiment.pkl", help="Path to trained sentiment model (.pkl).")
+    parser.add_argument(
+        "--sentiment-csv",
+        default="data/sentiment_labeled_weak.csv",
+        help="Path to labeled sentiment CSV used for training/evaluation.",
+    )
+    parser.add_argument(
+        "--model",
+        default="models/sentiment_weak.pkl",
+        help="Path to trained sentiment model (.pkl) output.",
+    )
     parser.add_argument("--outdir", default="results/final", help="Output directory for report artifacts.")
     parser.add_argument("--seed", type=int, default=42, help="Random seed.")
     parser.add_argument(
@@ -68,6 +81,27 @@ def _build_parser() -> argparse.ArgumentParser:
         nargs="+",
         default=SENTIMENT_WEIGHT_SWEEP_DEFAULT,
         help="Sweep values for sentiment_weight (default: 0.0 0.5 1.0 2.0).",
+    )
+    parser.add_argument(
+        "--run-weak-labeling",
+        action="store_true",
+        help="Generate weak labels before training and evaluation.",
+    )
+    parser.add_argument(
+        "--worksheet",
+        help="Optional worksheet CSV source for weak labeling (if omitted, weak labels are generated from --corpus).",
+    )
+    parser.add_argument(
+        "--weak-max-rows",
+        type=int,
+        default=1000,
+        help="Maximum rows sampled when weak labeling from corpus.",
+    )
+    parser.add_argument(
+        "--weak-min-per-class",
+        type=int,
+        default=50,
+        help="Minimum weak-labeled rows required for each class (positive/negative).",
     )
     return parser
 
@@ -186,12 +220,32 @@ def _best_row_by_metric(summary_df: pd.DataFrame, metric: str) -> pd.Series:
     return summary_df.loc[idx]
 
 
+def _dataframe_to_markdown_table(dataframe: pd.DataFrame) -> str:
+    headers = [str(column) for column in dataframe.columns]
+    separator = ["---" for _ in headers]
+    lines = [
+        f"| {' | '.join(headers)} |",
+        f"| {' | '.join(separator)} |",
+    ]
+
+    for _, row in dataframe.iterrows():
+        values: List[str] = []
+        for column in dataframe.columns:
+            value = row[column]
+            if pd.isna(value):
+                values.append("")
+            else:
+                values.append(str(value).replace("|", "\\|"))
+        lines.append(f"| {' | '.join(values)} |")
+    return "\n".join(lines)
+
+
 def _build_report_snippet(
     summary_df: pd.DataFrame,
     corpus_path: Path,
     sentiment_csv_path: Path,
     sentiment_model_path: Path,
-    generated_at: str,
+    seed: int,
 ) -> str:
     alignment_metric_cols = ["alignment_positive", "alignment_negative"]
     if "alignment_neutral" in summary_df.columns and not summary_df["alignment_neutral"].isna().all():
@@ -207,7 +261,7 @@ def _build_report_snippet(
     float_cols = [c for c in table_df.columns if c.startswith("alignment_") or c == "top_k_hit_rate"]
     for col in float_cols:
         table_df[col] = table_df[col].map(lambda v: f"{v:.4f}" if pd.notna(v) else "")
-    table_markdown = table_df.to_markdown(index=False)
+    table_markdown = _dataframe_to_markdown_table(table_df)
 
     return "\n".join(
         [
@@ -217,7 +271,7 @@ def _build_report_snippet(
             f"- Corpus: `{corpus_path}`",
             f"- Sentiment CSV: `{sentiment_csv_path}`",
             f"- Sentiment model: `{sentiment_model_path}`",
-            f"- Generated at (UTC): `{generated_at}`",
+            f"- Seed: `{seed}`",
             "",
             "## Best observed configurations",
             (
@@ -233,7 +287,27 @@ def _build_report_snippet(
             "## Summary table",
             table_markdown,
             "",
+            "_Note: weak labels are heuristic and indicative, not ground truth._",
+            "",
         ]
+    )
+
+
+def _maybe_generate_weak_labels(args: argparse.Namespace, sentiment_csv_path: Path) -> None:
+    if not args.run_weak_labeling:
+        return
+    weak_metrics = generate_weak_labels(
+        corpus_path=None if args.worksheet else Path(args.corpus),
+        worksheet_path=Path(args.worksheet) if args.worksheet else None,
+        out_path=sentiment_csv_path,
+        max_rows=args.weak_max_rows,
+        seed=args.seed,
+        min_per_class=args.weak_min_per_class,
+    )
+    print(
+        "Weak labeling complete: "
+        f"{weak_metrics['labeled_rows']} labeled rows "
+        f"(positive={weak_metrics['positive_rows']}, negative={weak_metrics['negative_rows']})."
     )
 
 
@@ -255,7 +329,26 @@ def run(args: argparse.Namespace) -> int:
     outdir = Path(args.outdir)
     outdir.mkdir(parents=True, exist_ok=True)
 
-    _ensure_inputs(corpus_path, sentiment_csv_path, sentiment_model_path)
+    if not corpus_path.exists():
+        raise FileNotFoundError(f'Corpus file not found at "{corpus_path}".')
+
+    _maybe_generate_weak_labels(args, sentiment_csv_path)
+    if not sentiment_csv_path.exists():
+        raise FileNotFoundError(
+            f'Sentiment CSV not found at "{sentiment_csv_path}". '
+            "Either provide an existing file via --sentiment-csv or set --run-weak-labeling."
+        )
+
+    train_metrics = train_sentiment_model(
+        csv_path=str(sentiment_csv_path),
+        model_out_path=str(sentiment_model_path),
+        seed=args.seed,
+    )
+    print(
+        "Sentiment model trained: "
+        f"{sentiment_model_path} "
+        f"(rows={train_metrics['labeled_rows']}, accuracy={train_metrics['accuracy']:.4f})."
+    )
 
     _, test_data, vocabulary, n_gram_counts_list = _train_language_model(
         corpus_path=corpus_path,
@@ -295,17 +388,16 @@ def run(args: argparse.Namespace) -> int:
     _plot_topk_hit_rate(summary_df, outdir)
     _plot_sentiment_alignment(summary_df, outdir)
 
-    generated_at = datetime.now(timezone.utc).isoformat()
     report_snippet = _build_report_snippet(
         summary_df=summary_df,
         corpus_path=corpus_path,
         sentiment_csv_path=sentiment_csv_path,
         sentiment_model_path=sentiment_model_path,
-        generated_at=generated_at,
+        seed=args.seed,
     )
     (outdir / "REPORT_SNIPPET.md").write_text(report_snippet, encoding="utf-8")
 
-    print(f"[{generated_at}] Saved final report artifacts to {outdir}")
+    print(f"Saved final report artifacts to {outdir}")
     print(f"- {outdir / 'summary.csv'}")
     print(f"- {outdir / 'summary.json'}")
     print(f"- {outdir / 'topk_hit_rate.png'}")
