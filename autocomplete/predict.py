@@ -75,6 +75,22 @@ def rerank_with_sentiment(
     sentiment_weight: float,
 ):
     model = load_sentiment_model(sentiment_model_path)
+    return rerank_with_sentiment_model(
+        prefix_text=prefix_text,
+        suggestions=suggestions,
+        target_sentiment=target_sentiment,
+        model=model,
+        sentiment_weight=sentiment_weight,
+    )
+
+
+def rerank_with_sentiment_model(
+    prefix_text: str,
+    suggestions,
+    target_sentiment: str,
+    model,
+    sentiment_weight: float,
+):
     classifier = model.named_steps.get("classifier")
     if classifier is None:
         raise ValueError(
