@@ -144,7 +144,7 @@ def _plot_topk_hit_rate(summary_df: pd.DataFrame, outdir: Path) -> None:
             marker="o",
             label=f"sentiment_weight={sentiment_weight}",
         )
-    plt.title("Top-k Hit Rate vs top_k")
+    plt.title("Top-K Hit Rate vs Top-K")
     plt.xlabel("top_k")
     plt.ylabel("top-k hit rate")
     plt.xticks(top_k_values)
@@ -170,7 +170,7 @@ def _plot_sentiment_alignment(summary_df: pd.DataFrame, outdir: Path) -> None:
         if col not in grouped.columns or grouped[col].isna().all():
             continue
         plt.plot(grouped["sentiment_weight"], grouped[col], marker="o", label=sentiment)
-    plt.title("Sentiment Alignment Rate vs sentiment_weight")
+    plt.title("Sentiment Alignment Rate vs Sentiment Weight")
     plt.xlabel("sentiment_weight")
     plt.ylabel("alignment rate")
     plt.xticks(sorted(grouped["sentiment_weight"].tolist()))
