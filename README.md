@@ -313,6 +313,33 @@ Notes:
 - The JSON includes run config, top-k hit-rate stats, per-sentiment alignment stats, and timestamp.
 - Alignment is computed as: predicted sentiment label of each suggested continuation equals the target sentiment.
 
+### Phase 5 (optional): Streamlit demo UI for sentiment-aware autocomplete
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the demo app:
+
+```bash
+streamlit run app.py
+```
+
+Controls:
+- **Prefix text**: text prefix to autocomplete
+- **Top-k suggestions**: number of rows shown
+- **Target sentiment**: `off`, `positive`, `negative`, or `neutral`
+- **Sentiment weight**: reranking strength (used when sentiment is not `off`)
+
+Expected behavior:
+- Suggestions update as you change inputs.
+- With sentiment `off`, baseline LM scores are shown and sentiment/final columns are `N/A`.
+- With sentiment enabled and a trained sentiment model available, ordering and scores are reranked.
+- If the sentiment model file is missing, the app shows a friendly message telling you to run:
+  `python -m autocomplete.train_sentiment --csv <labeled_csv> --out models/sentiment.pkl`
+
 ## Contributing
 
 We welcome contributions to this research project. Please see our [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines on how to submit issues, feature requests, and pull requests.
