@@ -132,41 +132,70 @@ The use of Twitter data introduces unique challenges, such as handling informal 
 
 ## Installation and Usage
 
+### Current baseline entry points
+
+- **Train flow (current baseline scripts):** `main.py` (Twitter), `main_gram.py` (Disney), `main_per.py`, `main_multi_dataset.py`
+- **Predict flow (current baseline functions):** `language_model.get_suggestions(...)` called from the interactive loops in the `main*.py` scripts
+
+### Setup (venv optional)
+
+```bash
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+```
+
 ### Install dependencies
+
 ```bash
-pip install nltk numpy pandas matplotlib
+pip install -r requirements.txt
 ```
 
-### Interactive autocomplete (single dataset)
+### Train command (baseline)
+
+This project currently trains in-memory when you run a main script:
+
 ```bash
-python main.py           # Twitter dataset
-python main_gram.py      # Disney dataset
-python main_per.py       # Disney dataset with per-model perplexity
-python main_multi_dataset.py  # all four datasets, interactive
+python main.py
 ```
 
-### Multi-dataset analysis report
-Run the full analysis on the four built-in datasets and generate a Markdown
-report plus CSV/JSON metrics:
+### Predict top-k next words (single command)
 
 ```bash
+python -m autocomplete.predict --text "I want to" --topk 5
+```
+
+Optional dataset override:
+
+```bash
+python -m autocomplete.predict --text "I want to" --topk 5 --data ./data/disney.txt
+```
+
+### Example input/output format
+
+Input:
+
+```bash
+python -m autocomplete.predict --text "I want to" --topk 3
+```
+
+Output format:
+
+```text
+Input: "I want to"
+Top 3 suggestions:
+1. <word>   <probability>
+2. <word>   <probability>
+3. <word>   <probability>
+```
+
+### Other existing scripts
+
+```bash
+python main_gram.py
+python main_per.py
+python main_multi_dataset.py
 python -m analysis.run
 ```
-
-Specify custom datasets using `NAME:PATH` pairs (one sentence per line):
-
-```bash
-python -m analysis.run \
-    --dataset Twitter:data/en_US.twitter.txt \
-    --dataset Disney:data/disney.txt
-```
-
-Outputs are written to:
-- `reports/REPORT.md` — human-readable comparison report
-- `reports/artifacts/metrics.csv` — per-dataset metrics table
-- `reports/artifacts/metrics.json` — same metrics in JSON format
-
-See [reports/REPORT.md](reports/REPORT.md) for the pre-generated report.
 
 ## Contributing
 
